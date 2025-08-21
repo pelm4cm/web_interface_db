@@ -1,0 +1,48 @@
+{% extends 'management/base.html' %}
+{% load utils %}
+{% block title %}Конструктор запросов{% endblock %}
+{% block content %}
+<div class="container">
+    <h2>Конструктор запросов по клиентам</h2>
+    <form method="get" style="margin: 8px 0 16px 0;">
+        <div class="row">
+            {% for value,label in selectable_fields %}
+                <label style="display:flex;align-items:center;gap:6px;">
+                    <input type="checkbox" name="fields" value="{{ value }}" {% if value in selected_fields %}checked{% endif %} /> {{ label }}
+                </label>
+            {% endfor %}
+        </div>
+        <div class="row" style="margin-top:10px;">
+            <input type="text" name="flt_name" placeholder="Название ТСЖ содержит" value="{{ filters.flt_name }}" />
+            <input type="text" name="flt_inn" placeholder="ИНН содержит" value="{{ filters.flt_inn }}" />
+            <input type="text" name="flt_city" placeholder="Город содержит" value="{{ filters.flt_city }}" />
+            <input type="text" name="flt_director" placeholder="Директор содержит" value="{{ filters.flt_director }}" />
+            <button type="submit">Сформировать</button>
+        </div>
+    </form>
+
+    {% if rows %}
+        <table>
+            <thead>
+                <tr>
+                    {% for field in selected_fields %}
+                        <th>{{ field }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                    <tr>
+                        {% for field in selected_fields %}
+                            <td>{{ row|get_item:field }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="muted">Нет данных для отображения. Настройте поля и фильтры, затем нажмите «Сформировать».</p>
+    {% endif %}
+ </div>
+{% endblock %}
+

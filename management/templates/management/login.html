@@ -1,0 +1,30 @@
+{% extends 'management/base.html' %}
+{% block title %}Вход{% endblock %}
+{% block content %}
+<div class="container" style="max-width:480px;">
+    <h2>Вход</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="field">
+            <label>Логин</label>
+            {{ form.username }}
+        </div>
+        <div class="field">
+            <label>Пароль</label>
+            {{ form.password }}
+        </div>
+        <div class="actions">
+            <button type="submit">Войти</button>
+        </div>
+    </form>
+ </div>
+{% endblock %}
+
+
+
+
+
+
+
+

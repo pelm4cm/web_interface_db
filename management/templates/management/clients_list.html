@@ -1,0 +1,40 @@
+{% extends 'management/base.html' %}
+{% block title %}Клиенты{% endblock %}
+{% block content %}
+<div class="container">
+    <h2>Клиенты</h2>
+    <form method="get" class="row" style="margin: 8px 0 16px 0;">
+        <input type="text" name="name" placeholder="Название ТСЖ" value="{{ filters.name }}" />
+        <input type="text" name="inn" placeholder="ИНН" value="{{ filters.inn }}" />
+        <input type="text" name="city" placeholder="Город" value="{{ filters.city }}" />
+        <button type="submit">Искать</button>
+        <a class="button" href="{% url 'client_create' %}">Добавить</a>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ТСЖ</th>
+                <th>ИНН</th>
+                <th>Город</th>
+                <th>Директор</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in clients %}
+                <tr>
+                    <td>{{ c.tszh_name }}</td>
+                    <td>{{ c.inn }}</td>
+                    <td>{{ c.city|default:"—" }}</td>
+                    <td>{% if c.director %}{{ c.director.name }}{% else %}—{% endif %}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4" class="muted">Ничего не найдено</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+ </div>
+{% endblock %}
+

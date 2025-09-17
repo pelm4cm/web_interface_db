@@ -20,12 +20,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-&$0e=cdktd9ss*2nf)-4=f3di067sn-d$nu-xn0zq*+3k-kwzc'
+SECRET_KEY = 'django-insecure-*^*fk5a+q9m2*6ifkrei=ov^3qjhgs^v)6($g#z_!eikf%qo91'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['a-tsg-staff.ru', 'www.a-tsg-staff.ru', '92.242.61.236']
 
 
 # Application definition
@@ -79,7 +79,7 @@ DATABASES = {
         'NAME': 'academia_test1',  # Имя вашей базы данных
         'USER': 'pelmach', # Имя пользователя, которого мы создали
         'PASSWORD': '26062001', # Ваш пароль
-        'HOST': 'localhost', # или IP-адрес вашего сервера
+        'HOST': 'db', # или IP-адрес вашего сервера
         'PORT': '5432',
     }
 }
@@ -103,13 +103,32 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# === НАСТРОЙКИ ДЛЯ РАБОТЫ ЗА NGINX REVERSE-PROXY С HTTPS ===
+# Эти настройки критически важны для безопасности и правильной работы
+# за прокси-сервером, таким как Nginx.
+
+# Доверяем заголовку, который Nginx добавляет при HTTPS-соединении
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Заставляем Django использовать заголовок Host от Nginx, а не от Gunicorn
+USE_X_FORWARDED_HOST = True
+
+# Устанавливаем флаг 'Secure' на cookie, чтобы они передавались только по HTTPS
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+# Указываем, с каких доменов можно безопасно отправлять POST-запросы (например, из админки)
+# Используем os.environ для гибкости, как в auth_service
+import os
+DOMAIN_NAME = os.environ.get('DOMAIN_NAME', 'a-tsg-staff.ru')
+CSRF_TRUSTED_ORIGINS = [f'https://{DOMAIN_NAME}', f'https://www.{DOMAIN_NAME}']
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru-ru'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Yekaterinburg'
 
 USE_I18N = True
 
@@ -119,7 +138,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -130,3 +151,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'login'
+
+# settings.py
+
+
